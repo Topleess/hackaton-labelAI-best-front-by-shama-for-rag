@@ -1,34 +1,56 @@
 // /components/Header/Header.js
 import React from 'react';
 import { styled } from '../../stitches.config';
-import AccuracyInfo from './AccuracyInfo';
-import SettingsButton from './SettingsButton';
+import AccuracyInfoComponent from './AccuracyInfoComponent'; // Импорт корректного компонента
 import UserMenu from './UserMenu';
+import SettingsButton from './SettingsButton'; // Убедись, что SettingsButton импортируется и используется
 
-// Основной контейнер для Header
-const HeaderContainer = styled('header', {
-  width: '100%',
-  padding: '15px 20px',
-  backgroundColor: '#0070f3',
-  color: 'white',
+const HeaderWrapper = styled('header', {
+  backgroundColor: '#f9f9f9',
+  padding: '20px',
   display: 'flex',
-  justifyContent: 'space-between',
   alignItems: 'center',
-  boxSizing: 'border-box',
+  justifyContent: 'space-between',
+  boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
 });
 
-function Header() {
+const LeftSection = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '15px',
+});
+
+const RightSection = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '15px',
+});
+
+const HeaderTitle = styled('h1', {
+  fontSize: '1.5rem',
+  color: '#000',
+  margin: 0,
+});
+
+function Header({ accuracy, currentUser, onUserChange, onSettingsClick }) {
   return (
-    <HeaderContainer>
-      {/* Компонент для отображения информации о точности */}
-      <AccuracyInfo />
-      {/* Компонент для открытия настроек */}
-      <SettingsButton />
-      {/* Выпадающее меню для выбора пользователя */}
-      <UserMenu />
-    </HeaderContainer>
+    <HeaderWrapper>
+      <LeftSection>
+        <HeaderTitle>Мой чат с ботом</HeaderTitle>
+      </LeftSection>
+
+      <RightSection>
+        {/* Кнопка настройки */}
+        <SettingsButton onClick={onSettingsClick} />
+
+        {/* Компонент для отображения точности */}
+        <AccuracyInfoComponent accuracy={accuracy} />
+
+        {/* Компонент для выбора пользователя */}
+        <UserMenu currentUser={currentUser} onUserChange={onUserChange} />
+      </RightSection>
+    </HeaderWrapper>
   );
 }
 
 export default Header;
-

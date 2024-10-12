@@ -4,12 +4,13 @@ import { styled } from '../../stitches.config';
 
 const ChatHistoryContainer = styled('div', {
   width: '250px',
-  height: '100%',
+  height: '87vh', // Установите относительную высоту
   overflowY: 'auto',
   borderRight: '1px solid #ddd',
   padding: '10px',
   boxSizing: 'border-box',
 });
+
 
 const ChatItem = styled('div', {
   padding: '10px',

@@ -1,12 +1,16 @@
 // /components/Header/UserMenu.js
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from '../../stitches.config';
+import UserProfileModal from '../Modal/UserProfileModal'; // Импортируем модалку для редактирования профиля
 
 const UserMenuWrapper = styled('div', {
   position: 'relative',
 });
 
 const UserButton = styled('button', {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '10px',
   padding: '10px',
   borderRadius: '5px',
   border: '1px solid #d3d3d3',
@@ -18,7 +22,40 @@ const UserButton = styled('button', {
   },
 });
 
-const UserDropdown = styled('div', {
+const UserAvatar = styled('div', {
+  width: '40px',
+  height: '40px',
+  borderRadius: '50%',
+  backgroundColor: '#ccc',
+});
+
+const UserDetails = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  textAlign: 'left',
+});
+
+const UserName = styled('span', {
+  fontSize: '1.2rem',
+  fontWeight: 'bold',
+});
+
+const UserRole = styled('span', {
+  fontSize: '1rem',
+  color: '#555',
+});
+
+const SettingsIcon = styled('button', {
+  backgroundColor: 'transparent',
+  border: 'none',
+  cursor: 'pointer',
+  marginLeft: 'auto',
+  '&:hover': {
+    color: '#d42e12',
+  },
+});
+
+const DropdownMenu = styled('div', {
   position: 'absolute',
   top: '100%',
   left: 0,
@@ -28,9 +65,12 @@ const UserDropdown = styled('div', {
   borderRadius: '5px',
   overflow: 'hidden',
   zIndex: 100,
+  width: '100%',
 });
 
 const UserOption = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
   padding: '10px',
   cursor: 'pointer',
   '&:hover': {
@@ -38,28 +78,80 @@ const UserOption = styled('div', {
   },
 });
 
+const NewProfileButton = styled('div', {
+  padding: '10px',
+  cursor: 'pointer',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  '&:hover': {
+    backgroundColor: '#f0f0f0',
+  },
+});
+
 function UserMenu({ currentUser, onUserChange }) {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const users = ['Пользователь 1', 'Пользователь 2', 'Пользователь 3'];
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState(null);
+
+  const users = [
+    { name: 'Фамилия Имя', role: 'ДОЛЖНОСТЬ' },
+    { name: 'Пользователь 2', role: 'Менеджер' },
+  ];
 
   const handleUserClick = (user) => {
     onUserChange(user);
-    setIsOpen(false);
+    setSelectedProfile(user);
+    setIsDropdownOpen(false);
+  };
+
+  const handleSettingsClick = (user) => {
+    setSelectedProfile(user);
+    setIsProfileModalOpen(true);
+  };
+
+  const handleNewProfileClick = () => {
+    setSelectedProfile(null);
+    setIsProfileModalOpen(true);
   };
 
   return (
     <UserMenuWrapper>
-      <UserButton onClick={() => setIsOpen(!isOpen)}>
-        {currentUser || 'Выберите пользователя'}
+      <UserButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+        <UserAvatar />
+        <UserDetails>
+          <UserName>{currentUser?.name || 'Выберите пользователя'}</UserName>
+          <UserRole>{currentUser?.role}</UserRole>
+        </UserDetails>
+        <SettingsIcon onClick={() => handleSettingsClick(currentUser)}>
+          ⚙️
+        </SettingsIcon>
       </UserButton>
-      {isOpen && (
-        <UserDropdown>
+
+      {isDropdownOpen && (
+        <DropdownMenu>
           {users.map((user) => (
-            <UserOption key={user} onClick={() => handleUserClick(user)}>
-              {user}
+            <UserOption key={user.name} onClick={() => handleUserClick(user)}>
+              <UserAvatar />
+              <UserDetails>
+                <UserName>{user.name}</UserName>
+                <UserRole>{user.role}</UserRole>
+              </UserDetails>
+              <SettingsIcon onClick={() => handleSettingsClick(user)}>
+                ⚙️
+              </SettingsIcon>
             </UserOption>
           ))}
-        </UserDropdown>
+          <NewProfileButton onClick={handleNewProfileClick}>
+            + Создать новый профиль
+          </NewProfileButton>
+        </DropdownMenu>
+      )}
+
+      {isProfileModalOpen && (
+        <UserProfileModal
+          profile={selectedProfile}
+          onClose={() => setIsProfileModalOpen(false)}
+        />
       )}
     </UserMenuWrapper>
   );

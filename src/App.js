@@ -3,9 +3,7 @@
 import React, { useState } from 'react';
 import { styled } from './stitches.config';
 import Header from './components/Header/Header';
-import ChatHistory from './components/Chat/ChatHistory';
-import ChatInput from './components/Chat/ChatInput';
-import MessageList from './components/Chat/MessageList';
+import Chat from './components/Chat/Chat'; // Импорт нового компонента Chat
 
 const AppContainer = styled('div', {
   display: 'flex',
@@ -19,19 +17,10 @@ const MainContentContainer = styled('div', {
   height: '100%',
 });
 
-const ChatContainer = styled('div', {
-  flexGrow: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  padding: '20px',
-  borderLeft: '1px solid #ddd',
-  boxSizing: 'border-box',
-});
-
 function App() {
   const [messages, setMessages] = useState([]);
   const [chats, setChats] = useState([{ name: 'Чат 1' }, { name: 'Чат 2' }]);
-  const [selectedChat, setSelectedChat] = useState(null);
+  const [selectedChat, setSelectedChat] = useState(chats[0]);
 
   const handleCreateChat = () => {
     const newChatName = `Чат ${chats.length + 1}`;
@@ -44,18 +33,15 @@ function App() {
     <AppContainer>
       <Header />
       <MainContentContainer>
-        <ChatHistory
+        <Chat
           chats={chats}
-          onSelectChat={(chat) => {
-            setSelectedChat(chat);
-            setMessages([]); // Очистить сообщения при переключении чатов
-          }}
+          setChats={setChats}
+          selectedChat={selectedChat}
+          setSelectedChat={setSelectedChat}
+          messages={messages}
+          setMessages={setMessages}
           onCreateChat={handleCreateChat}
         />
-        <ChatContainer>
-          <MessageList messages={messages} />
-          <ChatInput setMessages={setMessages} />
-        </ChatContainer>
       </MainContentContainer>
     </AppContainer>
   );
