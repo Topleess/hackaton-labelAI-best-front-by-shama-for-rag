@@ -38,7 +38,7 @@ function Header({ accuracy, currentUser, onUserChange, onSettingsClick }) {
     <HeaderWrapper>
       <LeftSection>
         <HeaderTitle>Q&A RZD</HeaderTitle>
-        <AccuracyInfoComponent accuracy={accuracy || '0%'} />
+        <AccuracyInfoComponent accuracy={accuracy || '95%'} />
       </LeftSection>
 
       <RightSection>

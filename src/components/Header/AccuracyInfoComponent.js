@@ -36,8 +36,9 @@ const AccuracyPercentage = styled('span', {
 });
 
 const AccuracyLabel = styled('span', {
-  fontSize: '0.9rem',
+  fontSize: '1.2rem',
   color: '#555',
+  fontWeight: "500",
 
   '@media (max-width: 768px)': {
     fontSize: '0.8rem',

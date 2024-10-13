@@ -1,6 +1,6 @@
 // /src/App.js
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { styled } from './stitches.config';
 import Header from './components/Header/Header';
 import Chat from './components/Chat/Chat'; // Импорт нового компонента Chat
@@ -11,10 +11,9 @@ const AppContainer = styled('div', {
   height: '100vh',
 });
 
-const MainContentContainer = styled('div', {
+const MainContentContainer = styled('main', {
   display: 'flex',
   flexGrow: 1,
-  height: '100%',
 });
 
 function App() {
