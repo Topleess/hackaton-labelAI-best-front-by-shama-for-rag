@@ -1,7 +1,7 @@
 // /components/Header/UserMenu.js
 import React, { useState } from 'react';
 import { styled } from '../../stitches.config';
-import UserProfileModal from '../Modal/UserProfileModal'; // Импортируем модалку для редактирования профиля
+import UserProfileModal from '../Modal/UserProfileModal';
 
 const UserMenuWrapper = styled('div', {
   position: 'relative',
@@ -10,7 +10,7 @@ const UserMenuWrapper = styled('div', {
 const UserButton = styled('button', {
   display: 'flex',
   alignItems: 'center',
-  gap: '10px',
+  gap: '20px',
   padding: '10px',
   borderRadius: '5px',
   border: '1px solid #d3d3d3',
@@ -23,10 +23,15 @@ const UserButton = styled('button', {
 });
 
 const UserAvatar = styled('div', {
-  width: '40px',
-  height: '40px',
+  width: '30px',
+  height: '30px',
   borderRadius: '50%',
   backgroundColor: '#ccc',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '1.5rem',
+  color: '#fff',
 });
 
 const UserDetails = styled('div', {
@@ -91,11 +96,11 @@ const NewProfileButton = styled('div', {
 function UserMenu({ currentUser, onUserChange }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [selectedProfile, setSelectedProfile] = useState({ name: 'Иван П.', role: 'Руководитель проекта' });
 
   const users = [
-    { name: 'Фамилия Имя', role: 'ДОЛЖНОСТЬ' },
-    { name: 'Пользователь 2', role: 'Менеджер' },
+    { name: 'Иван П.', role: 'Руководитель проекта' },
+    { name: 'Алексей К.', role: 'Менеджер отдела продаж' },
   ];
 
   const handleUserClick = (user) => {
@@ -117,12 +122,14 @@ function UserMenu({ currentUser, onUserChange }) {
   return (
     <UserMenuWrapper>
       <UserButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-        <UserAvatar />
+        <UserAvatar>
+          👨‍💼
+        </UserAvatar>
         <UserDetails>
-          <UserName>{currentUser?.name || 'Выберите пользователя'}</UserName>
-          <UserRole>{currentUser?.role}</UserRole>
+          <UserName>{selectedProfile?.name || 'Выберите пользователя'}</UserName>
+          <UserRole>{selectedProfile?.role || '—'}</UserRole>
         </UserDetails>
-        <SettingsIcon onClick={() => handleSettingsClick(currentUser)}>
+        <SettingsIcon onClick={(e) => { e.stopPropagation(); handleSettingsClick(selectedProfile); }}>
           ⚙️
         </SettingsIcon>
       </UserButton>
@@ -131,12 +138,14 @@ function UserMenu({ currentUser, onUserChange }) {
         <DropdownMenu>
           {users.map((user) => (
             <UserOption key={user.name} onClick={() => handleUserClick(user)}>
-              <UserAvatar />
+              <UserAvatar>
+                👨‍💼
+              </UserAvatar>
               <UserDetails>
                 <UserName>{user.name}</UserName>
                 <UserRole>{user.role}</UserRole>
               </UserDetails>
-              <SettingsIcon onClick={() => handleSettingsClick(user)}>
+              <SettingsIcon onClick={(e) => { e.stopPropagation(); handleSettingsClick(user); }}>
                 ⚙️
               </SettingsIcon>
             </UserOption>
