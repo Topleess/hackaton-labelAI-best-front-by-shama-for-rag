@@ -4,7 +4,7 @@ import { styled } from '../../stitches.config';
 
 const ChatHistoryContainer = styled('div', {
   width: '250px',
-  height: '87vh', // Установите относительную высоту
+  height: '87vh',  // Установите относительную высоту
   overflowY: 'auto',
   borderRight: '1px solid #ddd',
   padding: '10px',
