@@ -1,6 +1,8 @@
 // /components/Chat/MessageList.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '../../stitches.config';
+
+
 
 const MessageListContainer = styled('div', {
   flexGrow: 1,
@@ -61,22 +63,63 @@ const MessageIcon = styled('div', {
 
 // Компонент для отображения списка сообщений
 function MessageList({ messages, onBotReply }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   return (
     <MessageListContainer>
-      {messages.map((message, index) =>
-        message.type === 'user' ? (
-          <UserMessageContainer key={index}>
-            <Message type="user" dangerouslySetInnerHTML={{ __html: message.text }} />
-            <MessageIcon>👤</MessageIcon> {/* Иконка пользователя справа */}
-          </UserMessageContainer>
-        ) : (
-          <BotMessageContainer key={index}>
-            <MessageIcon>🤖</MessageIcon> {/* Иконка бота слева */}
-            <Message type="bot" dangerouslySetInnerHTML={{ __html: message.text }} />
-          </BotMessageContainer>
+      <>
+      {messages?.map((message, index) =>
+        message.text_data.role === 'user' ? (
+          <UserMessageContainer>
+          <Message
+            type="user"
+            dangerouslySetInnerHTML={{ __html: message.text_data.content }}
+          />
+          <MessageIcon>👤</MessageIcon> {/* Иконка пользователя справа */}
+          {message.rag_data && message.rag_data.length > 0 && (
+            <>
+              <button onClick={toggleExpand}>
+                {isExpanded ? 'Скрыть подробности' : 'Показать подробности'}
+              </button>
+              {isExpanded && (
+                <div className="rag-data">
+                  {message.rag_data.map((item, index) => (
+                    <p key={index}>{item.chunk_text}</p>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </UserMessageContainer>
+      ) : (
+        <BotMessageContainer>
+          <MessageIcon>🤖</MessageIcon> {/* Иконка бота слева */}
+          <Message
+            type="assistant"
+            dangerouslySetInnerHTML={{ __html: message.text_data.content }}
+          />
+          {message.rag_data && message.rag_data.length > 0 && (
+            <>
+              <button onClick={toggleExpand}>
+                {isExpanded ? 'Скрыть подробности' : 'Показать подробности'}
+              </button>
+              {isExpanded && (
+                <div className="rag-data">
+                  {message.rag_data.map((item, index) => (
+                    <p key={index}>{item.chunk_text}</p>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </BotMessageContainer>
         )
       )}
+      </>
     </MessageListContainer>
   );
 }

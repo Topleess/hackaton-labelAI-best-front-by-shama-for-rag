@@ -1,6 +1,6 @@
 // /src/App.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from './stitches.config';
 import Header from './components/Header/Header';
 import Chat from './components/Chat/Chat'; // Импорт нового компонента Chat
